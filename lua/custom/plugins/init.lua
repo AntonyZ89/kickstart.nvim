@@ -8,7 +8,7 @@ return {
   "Exafunction/codeium.vim",
   "jiangmiao/auto-pairs",
   {
-    dir = "/var/www/nvim/electron-vue.nvim",
+    "antonyz89/electron-vue.nvim",
     dependencies = { "rktjmp/lush.nvim" },
     config = function()
       vim.cmd.colorscheme 'electron-vue-darker'

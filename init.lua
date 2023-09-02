@@ -418,11 +418,6 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    buffer = bufnr,
-    command = "EslintFixAll"
-  })
 end
 
 -- Enable the following language servers
@@ -440,6 +435,12 @@ local servers = {
   -- rust_analyzer = {},
   eslint = {
     filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+    on_attach = function(_, bufnr)
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = bufnr,
+        command = "EslintFixAll"
+      })
+    end
   },
   volar = {
     filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
@@ -472,11 +473,24 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    local server = servers[server_name]
+    local server_on_attach = server.on_attach
+
+    if server_on_attach then
+      server.on_attach = nil
+    end
+
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        if server_on_attach then
+          server_on_attach(client, bufnr)
+        end
+      end,
+      settings = server,
+      filetypes = server.filetypes,
     }
   end
 }

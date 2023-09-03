@@ -101,11 +101,9 @@ require('lazy').setup({
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
 
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
+      'hrsh7th/cmp-nvim-lsp',         -- Adds LSP completion capabilities
+      'rafamadriz/friendly-snippets', -- Adds a number of user-friendly snippets
+      'hrsh7th/cmp-path',             -- Adds support for path completion
     },
   },
 
@@ -127,7 +125,7 @@ require('lazy').setup({
         local gitsigns = require('gitsigns')
         vim.keymap.set('n', '<leader>gp', gitsigns.prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', gitsigns.next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', gitsigns.preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>gh', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview [H]unk' })
       end,
     },
   },
@@ -276,8 +274,9 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
+        ['<C-j>'] = require('telescope.actions').move_selection_next,
+        ['<C-k>'] = require('telescope.actions').move_selection_previous,
+        ['<C-q>'] = require('telescope.actions').send_to_qflist + require('telescope.actions').open_qflist,
       },
     },
   },
@@ -308,7 +307,22 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'lua', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'css', 'scss', 'vue', 'php' },
+  ensure_installed = {
+    'lua',
+    'rust',
+    'tsx',
+    'javascript',
+    'typescript',
+    'vim',
+    'vimdoc',
+    'css',
+    'scss',
+    'vue',
+    'php',
+    'phpdoc',
+    'html',
+    'json',
+  },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -513,7 +527,7 @@ cmp.setup {
     ['<C-k>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
@@ -522,6 +536,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'path' },
   },
 }
 

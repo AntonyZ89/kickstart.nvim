@@ -7,6 +7,7 @@ return {
   "aserowy/tmux.nvim",
   "Exafunction/codeium.vim",
   "jiangmiao/auto-pairs",
+  "mg979/vim-visual-multi",
   {
     "antonyz89/electron-vue.nvim",
     dependencies = { "rktjmp/lush.nvim" },
@@ -38,5 +39,5 @@ return {
     init = function() vim.g.mkdp_filetypes = { "markdown" } end,
     ft = { "markdown" },
   },
-  -- { 'akinsho/toggleterm.nvim' }
+  { "akinsho/toggleterm.nvim", config = true }
 }

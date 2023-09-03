@@ -10,16 +10,23 @@ local imap = function(key, effect, desc)
   vim.keymap.set('i', key, effect, { silent = true, noremap = true, desc = desc })
 end
 
--- TODO: create tmap for terminal mapping
+local tmap = function(key, effect)
+  vim.keymap.set('t', key, effect, { buffer = 0 })
+end
 
 --  General
 nmap('<c-s>', '<cmd>:w<cr>', 'Save file')
 imap('<c-s>', '<cmd>:w<cr><esc>', 'Save file and back to normal mode')
+nmap('<leader>o', '<cmd>:Explore<cr>', 'Open Explorer')
 
 nmap('<c-j>', '<c-w>j', 'Move to top window')
 nmap('<c-k>', '<c-w>k', 'Move to bottom window')
 nmap('<c-h>', '<c-w>h', 'Move to left window')
 nmap('<c-l>', '<c-w>l', 'Move to right window')
+
+imap('jk', '<esc>', 'Exit insert mode')
+
+vmap('p', '"_dP', 'Paste without yanking')
 
 -- LazyGit
 nmap('<leader>gg', ':LazyGit<cr>', 'Open LazyGit')
@@ -35,17 +42,20 @@ nmap('L', ui.nav_next, '[Harpoon] Next')
 nmap('H', ui.nav_prev, '[Harpoon] Prev')
 
 -- Terminal
--- TODO: mappings
---
-local opts = { buffer = 0 }
-vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+nmap("<leader>tf", "<cmd>ToggleTerm direction=float<cr>", "Open terminal on float")
+nmap("<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Open terminal on horizontal split")
+nmap("<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Open terminal on vertical split")
 
-vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+function _G.set_terminal_keymaps()
+  tmap('<esc>', [[<C-\><C-n>]])
+  tmap('jk', [[<C-\><C-n>]])
 
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
--- vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+  tmap('<C-h>', [[<Cmd>wincmd h<CR>]])
+  tmap('<C-j>', [[<Cmd>wincmd j<CR>]])
+  tmap('<C-k>', [[<Cmd>wincmd k<CR>]])
+  tmap('<C-l>', [[<Cmd>wincmd l<CR>]])
+  tmap('<C-w>', [[<C-\><C-n><C-w>]])
+end
+
+-- register terminal keymaps
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')

@@ -214,6 +214,8 @@ require 'custom.mapping'
 vim.o.hlsearch = false
 
 -- Make line numbers default
+vim.wo.cursorline = true
+vim.wo.number = true
 vim.wo.relativenumber = true
 
 -- Enable mouse mode
@@ -240,6 +242,9 @@ vim.wo.signcolumn = 'yes'
 -- Decrease update time
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
+
+-- Disable line wrapping
+vim.o.wrap = false
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -521,6 +526,10 @@ cmp.setup {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-j>'] = cmp.mapping.select_next_item(),

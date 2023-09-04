@@ -48,7 +48,6 @@ nmap("<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Open termi
 
 function _G.set_terminal_keymaps()
   tmap('<esc>', [[<C-\><C-n>]])
-  tmap('jk', [[<C-\><C-n>]])
 
   tmap('<C-h>', [[<Cmd>wincmd h<CR>]])
   tmap('<C-j>', [[<Cmd>wincmd j<CR>]])

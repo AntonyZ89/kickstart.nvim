@@ -104,6 +104,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',         -- Adds LSP completion capabilities
       'rafamadriz/friendly-snippets', -- Adds a number of user-friendly snippets
       'hrsh7th/cmp-path',             -- Adds support for path completion
+      'js-everts/cmp-tailwind-colors' -- Adds support for Tailwind CSS colors
     },
   },
 
@@ -191,7 +192,7 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -209,6 +210,9 @@ require 'custom.mapping'
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+
+-- Enables pseudo-transparency for the |popup-menu|
+vim.o.pumblend = 10
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -327,6 +331,10 @@ require('nvim-treesitter.configs').setup {
     'phpdoc',
     'html',
     'json',
+    'dockerfile',
+    'markdown',
+    'markdown_inline',
+    'prisma'
   },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
@@ -466,7 +474,11 @@ local servers = {
   },
   intelephense = {},
   unocss = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  emmet_ls = {},
+  tailwindcss = {},
+  dockerls = {},
+  marksman = {},
+  prismals = {},
 
   lua_ls = {
     Lua = {
@@ -492,7 +504,7 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
-    local server = servers[server_name]
+    local server = servers[server_name] or {}
     local server_on_attach = server.on_attach
 
     if server_on_attach then
@@ -521,6 +533,34 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
+local kind_icons = {
+  Text = "",
+  Method = "",
+  Function = "",
+  Constructor = "",
+  Field = "",
+  Variable = "",
+  Class = "ﴯ",
+  Interface = "",
+  Module = "",
+  Property = "ﰠ",
+  Unit = "",
+  Value = "",
+  Enum = "",
+  Keyword = "",
+  Snippet = "",
+  Color = "",
+  File = "",
+  Reference = "",
+  Folder = "",
+  EnumMember = "",
+  Constant = "",
+  Struct = "",
+  Event = "",
+  Operator = "",
+  TypeParameter = "",
+}
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -546,6 +586,23 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
+  },
+  formatting = {
+    fields = { "kind", "abbr", "menu" }, -- order of columns,
+    format = function(entry, item)
+      if item.kind == "Color" then
+        item = require("cmp-tailwind-colors").format(entry, item)
+
+        if item.kind ~= "Color" then
+          item.menu = "Color"
+          return item
+        end
+      end
+
+      item.menu = item.kind
+      item.kind = kind_icons[item.kind] .. " "
+      return item
+    end,
   },
 }
 

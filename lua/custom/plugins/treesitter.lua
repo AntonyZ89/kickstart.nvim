@@ -6,7 +6,6 @@ return {
   },
   build = ':TSUpdate',
   opts = function()
-    print('teste')
     -- See `:help nvim-treesitter`
     require 'nvim-treesitter.configs'.setup {
       -- Add languages to be installed here that you want installed for treesitter
@@ -48,7 +47,7 @@ return {
       textobjects = {
         select = {
           enable = true,
-          lookahead = true,   -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
           keymaps = {
             -- You can use the capture groups defined in textobjects.scm
             ['aa'] = '@parameter.outer',
@@ -61,7 +60,7 @@ return {
         },
         move = {
           enable = true,
-          set_jumps = true,   -- whether to set jumps in the jumplist
+          set_jumps = true, -- whether to set jumps in the jumplist
           goto_next_start = {
             [']m'] = '@function.outer',
             [']]'] = '@class.outer',

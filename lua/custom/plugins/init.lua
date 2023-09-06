@@ -12,7 +12,6 @@ return {
   -- NOTE: First, some plugins that don't require any configuration
   "aserowy/tmux.nvim",
   "Exafunction/codeium.vim",
-  -- "jiangmiao/auto-pairs",
   "mg979/vim-visual-multi",
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -21,6 +20,7 @@ return {
   { "akinsho/toggleterm.nvim", config = true },
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',   opts = {} },
+  { "windwp/nvim-ts-autotag",  opts = {} },
   {
     "antonyz89/electron-vue.nvim",
     dependencies = { "rktjmp/lush.nvim" },
@@ -84,4 +84,10 @@ return {
       show_trailing_blankline_indent = false,
     },
   },
+  {
+    'altermo/ultimate-autopair.nvim',
+    event = { 'InsertEnter', 'CmdlineEnter' },
+    branch = 'v0.6',
+    opts = {},
+  }
 }

@@ -3,12 +3,24 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  "kdheepak/lazygit.nvim",
+  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
+  --       These are some example plugins that I've included in the kickstart repository.
+  --       Uncomment any of the lines below to enable them.
+  require 'kickstart.plugins.autoformat',
+
+  -- require 'kickstart.plugins.debug',
+  -- NOTE: First, some plugins that don't require any configuration
   "aserowy/tmux.nvim",
   "Exafunction/codeium.vim",
-  "jiangmiao/auto-pairs",
+  -- "jiangmiao/auto-pairs",
   "mg979/vim-visual-multi",
+  -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth',
+  -- Useful plugin to show you pending keybinds.
+  { 'folke/which-key.nvim',    opts = {} },
   { "akinsho/toggleterm.nvim", config = true },
+  -- "gc" to comment visual regions/lines
+  { 'numToStr/Comment.nvim',   opts = {} },
   {
     "antonyz89/electron-vue.nvim",
     dependencies = { "rktjmp/lush.nvim" },
@@ -32,7 +44,7 @@ return {
   },
   {
     "tpope/vim-surround",
-    dependencies = { "tpope/vim-repeat" },
+    dependencies = { "tpope/vim-repeat" }
   },
   {
     "iamcco/markdown-preview.nvim",
@@ -47,6 +59,29 @@ return {
         names = true,
         tailwind = true,
       },
+    },
+  },
+  {
+    -- Set lualine as statusline
+    'nvim-lualine/lualine.nvim',
+    -- See `:help lualine.txt`
+    opts = {
+      options = {
+        icons_enabled = false,
+        theme = 'auto',
+        component_separators = '|',
+        section_separators = '',
+      },
+    },
+  },
+  {
+    -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- See `:help indent_blankline.txt`
+    opts = {
+      char = '┊',
+      show_trailing_blankline_indent = false,
     },
   },
 }

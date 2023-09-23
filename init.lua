@@ -169,7 +169,6 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
   -- rust_analyzer = {},
   eslint = {
     filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
@@ -197,6 +196,8 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+
+  pylsp = {},
 }
 
 -- Setup neovim lua configuration
@@ -204,6 +205,9 @@ require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- fixes volar watch files
+capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
@@ -215,6 +219,7 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    local lspconfig = require('lspconfig')
     local server = servers[server_name] or {}
     local server_on_attach = server.on_attach
 
@@ -222,7 +227,7 @@ mason_lspconfig.setup_handlers {
       server.on_attach = nil
     end
 
-    require('lspconfig')[server_name].setup {
+    lspconfig[server_name].setup {
       capabilities = capabilities,
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)

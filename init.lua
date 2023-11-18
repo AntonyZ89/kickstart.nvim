@@ -169,9 +169,9 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- rust_analyzer = {},
+  rust_analyzer = {},
   eslint = {
-    filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+    filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'css', 'scss' },
     on_attach = function(_, bufnr)
       vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,

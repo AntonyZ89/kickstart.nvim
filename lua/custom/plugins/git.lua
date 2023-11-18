@@ -4,6 +4,8 @@ return {
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
+  -- Solve git conflicts
+  { 'akinsho/git-conflict.nvim', version = "*", config = true },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -18,9 +20,14 @@ return {
       },
       on_attach = function(bufnr)
         local gitsigns = require('gitsigns')
+
         vim.keymap.set('n', '<leader>gp', gitsigns.prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', gitsigns.next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>gh', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview [H]unk' })
+        vim.keymap.set(
+          'n', '<leader>gb',
+          function() gitsigns.blame_line { full = true } end,
+          { buffer = bufnr, desc = 'Toggle [B]lame' })
       end,
     },
   }

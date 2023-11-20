@@ -8,7 +8,7 @@ return {
   --       Uncomment any of the lines below to enable them.
   require 'kickstart.plugins.autoformat',
 
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- NOTE: First, some plugins that don't require any configuration
   "aserowy/tmux.nvim",
   "Exafunction/codeium.vim",

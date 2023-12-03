@@ -24,9 +24,15 @@ nmap('<c-k>', '<c-w>k', 'Move to bottom window')
 nmap('<c-h>', '<c-w>h', 'Move to left window')
 nmap('<c-l>', '<c-w>l', 'Move to right window')
 
+nmap('<C-p>', '<C-d>zz', 'Redo and center cursor')
+nmap('<C-u>', '<C-u>zz', 'Undo and center cursor')
+
 imap('jk', '<esc>', 'Exit insert mode')
 
 vmap('p', '"_dP', 'Paste without yanking')
+
+vmap('J', ":m '>+1<CR>gv=gv", 'Move down')
+vmap('K', ":m '<-2<CR>gv=gv", 'Move up')
 
 -- LazyGit
 nmap('<leader>gg', ':LazyGit<cr>', 'Open LazyGit')

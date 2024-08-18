@@ -21,6 +21,7 @@ return {
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',   opts = {} },
   { "windwp/nvim-ts-autotag",  opts = {} },
+  { "wakatime/vim-wakatime",   lazy = false },
   {
     "antonyz89/electron-vue.nvim",
     dependencies = { "rktjmp/lush.nvim" },
@@ -32,6 +33,7 @@ return {
     "ThePrimeagen/harpoon",
     dependencies = { "nvim-lua/plenary.nvim" }
   },
+  { "xiyaowong/transparent.nvim" },
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },

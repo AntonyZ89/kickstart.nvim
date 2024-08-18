@@ -37,16 +37,6 @@ vmap('K', ":m '<-2<CR>gv=gv", 'Move up')
 -- LazyGit
 nmap('<leader>gg', ':LazyGit<cr>', 'Open LazyGit')
 
--- Harpoon
-local mark = require('harpoon.mark')
-local ui = require('harpoon.ui')
-
-nmap('<leader>a', mark.add_file, '[Harpoon] Add file')
-nmap('<C-e>', ui.toggle_quick_menu, '[Harpoon] Toggle menu')
-
-nmap('L', ui.nav_next, '[Harpoon] Next')
-nmap('H', ui.nav_prev, '[Harpoon] Prev')
-
 -- Terminal
 nmap("<leader>tf", "<cmd>ToggleTerm direction=float<cr>", "Open terminal on float")
 nmap("<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Open terminal on horizontal split")

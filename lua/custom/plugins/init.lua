@@ -29,10 +29,6 @@ return {
       vim.cmd.colorscheme 'electron-vue-darker'
     end,
   },
-  {
-    "ThePrimeagen/harpoon",
-    dependencies = { "nvim-lua/plenary.nvim" }
-  },
   { "xiyaowong/transparent.nvim" },
   {
     "folke/todo-comments.nvim",

@@ -46,3 +46,15 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+-- Codeium
+
+vim.g.codeium_disable_bindings = 1
+
+-- Neovide
+
+vim.g.neovide_underline_stroke_scale = 2.0 -- fix underline thickness
+vim.g.neovide_hide_mouse_when_typing = true
+vim.g.neovide_cursor_antialiasing = true
+vim.g.neovide_transparency = 0.9
+vim.g.neovide_refresh_rate = 60

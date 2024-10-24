@@ -1,5 +1,3 @@
-print('loading node config')
-
 local dap = require 'dap'
 
 local js_based_languages = {

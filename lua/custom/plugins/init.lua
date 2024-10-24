@@ -11,7 +11,14 @@ return {
   require 'kickstart.plugins.debug',
   -- NOTE: First, some plugins that don't require any configuration
   "aserowy/tmux.nvim",
-  "Exafunction/codeium.vim",
+  {
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({
+        log_level = "off",
+      })
+    end,
+  },
   "mg979/vim-visual-multi",
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -29,7 +36,17 @@ return {
       vim.cmd.colorscheme 'electron-vue-darker'
     end,
   },
-  { "xiyaowong/transparent.nvim" },
+  {
+    "xiyaowong/transparent.nvim",
+    opts = function()
+      -- Disable transparent background in neovide
+      if vim.g.neovide then
+        return {
+          groups = {}
+        }
+      end
+    end
+  },
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -88,5 +105,33 @@ return {
     event = { 'InsertEnter', 'CmdlineEnter' },
     branch = 'v0.6',
     opts = {},
-  }
+  },
+  {
+    "tzachar/highlight-undo.nvim",
+    opts = {
+      duration = 300,
+      undo = {
+        hlgroup = 'HighlightUndo',
+        mode = 'n',
+        lhs = 'u',
+        map = 'undo',
+        opts = {}
+      },
+      redo = {
+        hlgroup = 'HighlightRedo',
+        mode = 'n',
+        lhs = '<C-r>',
+        map = 'redo',
+        opts = {}
+      },
+      highlight_for_count = true,
+    }
+  },
+  { "RRethy/vim-illuminate" },
+  {
+    "ahmedkhalf/project.nvim",
+    config = function()
+      require("project_nvim").setup({})
+    end,
+  },
 }

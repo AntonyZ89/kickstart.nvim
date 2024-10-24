@@ -180,7 +180,79 @@ local servers = {
     end
   },
   volar = {
-    filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
+    on_attach = function(_, bufnr)
+      require("lspconfig").volar.setup({
+        -- NOTE: Uncomment to restrict Volar to only Vue/Nuxt projects. This will enable Volar to work alongside other language servers (tsserver).
+
+        init_options = {
+          vue = {
+            hybridMode = false,
+          },
+          -- NOTE: This might not be needed. Uncomment if you encounter issues.
+
+          -- typescript = {
+          --   tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
+          -- },
+        },
+        settings = {
+          typescript = {
+            inlayHints = {
+              enumMemberValues = {
+                enabled = true,
+              },
+              functionLikeReturnTypes = {
+                enabled = true,
+              },
+              propertyDeclarationTypes = {
+                enabled = true,
+              },
+              parameterTypes = {
+                enabled = true,
+                suppressWhenArgumentMatchesName = true,
+              },
+              variableTypes = {
+                enabled = true,
+              },
+            },
+          },
+        },
+      })
+    end,
+  },
+  ts_ls = {
+    on_attach = function(_, bufnr)
+      local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
+      local volar_path = mason_packages .. "/vue-language-server/node_modules/@vue/language-server"
+
+      require("lspconfig").ts_ls.setup({
+        -- NOTE: To enable hybridMode, change HybrideMode to true above and uncomment the following filetypes block.
+
+        filetypes = { "typescript", "javascript", "vue" },
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = volar_path,
+              languages = { "typescript", "javascript", "vue" },
+            },
+          },
+        },
+        -- settings = {
+        --   typescript = {
+        --     inlayHints = {
+        --       includeInlayParameterNameHints = "all",
+        --       includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        --       includeInlayFunctionParameterTypeHints = true,
+        --       includeInlayVariableTypeHints = true,
+        --       includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        --       includeInlayPropertyDeclarationTypeHints = true,
+        --       includeInlayFunctionLikeReturnTypeHints = true,
+        --       includeInlayEnumMemberValueHints = true,
+        --     },
+        --   },
+        -- },
+      })
+    end
   },
   intelephense = {},
   unocss = {},
@@ -237,6 +309,7 @@ mason_lspconfig.setup_handlers {
         end
       end,
       settings = server,
+      init_options = server.init_options,
       filetypes = server.filetypes,
     }
   end

@@ -44,9 +44,9 @@ return {
           return
         end
 
-        -- Tsserver usually works poorly. Sorry you work with bad languages
+        -- ts_ls (or tsserver) usually works poorly.
         -- You can remove this line if you know what you're doing :)
-        if client.name == 'tsserver' or client.name == 'volar' then
+        if client.name == 'ts_ls' or client.name == 'tsserver' or client.name == 'volar' then
           return
         end
 

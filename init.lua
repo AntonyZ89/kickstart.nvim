@@ -43,6 +43,9 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- set custom variables
+local variables = require 'custom.variables'
+
 -- init lazy.vim
 require 'custom.lazy'
 
@@ -154,7 +157,12 @@ local on_attach = function(_, bufnr)
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
+    vim.lsp.buf.format {
+      async = true,
+      filter = function(client)
+        return not vim.tbl_contains(variables.ignore_clients, client.name)
+      end,
+    }
   end, { desc = 'Format current buffer with LSP' })
 end
 

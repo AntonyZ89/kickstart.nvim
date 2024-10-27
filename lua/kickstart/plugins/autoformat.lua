@@ -6,6 +6,8 @@
 return {
   'neovim/nvim-lspconfig',
   config = function()
+    local variables = require 'custom.variables'
+
     -- Switch for controlling whether you want autoformatting.
     --  Use :KickstartFormatToggle to toggle autoformatting on or off
     local format_is_enabled = true
@@ -46,7 +48,7 @@ return {
 
         -- ts_ls (or tsserver) usually works poorly.
         -- You can remove this line if you know what you're doing :)
-        if client.name == 'ts_ls' or client.name == 'tsserver' or client.name == 'volar' then
+        if vim.tbl_contains(variables.ignore_clients, client.name) then
           return
         end
 

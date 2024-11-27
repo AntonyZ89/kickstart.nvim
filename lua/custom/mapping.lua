@@ -14,7 +14,12 @@ local tmap = function(key, effect)
   vim.keymap.set('t', key, effect, { buffer = 0 })
 end
 
+local xmap = function(key, effect, desc)
+  vim.keymap.set('x', key, effect, { silent = true, noremap = true, desc = desc })
+end
+
 --  General
+nmap('<leader>f', '<cmd>:Format<cr>', 'Format code with lint')
 nmap('<c-s>', '<cmd>:w<cr>', 'Save file')
 imap('<c-s>', '<cmd>:w<cr><esc>', 'Save file and back to normal mode')
 nmap('<leader>o', '<cmd>:Explore<cr>', 'Open Explorer')
@@ -29,7 +34,10 @@ nmap('<C-u>', '<C-u>zz', 'Undo and center cursor')
 
 imap('jk', '<esc>', 'Exit insert mode')
 
-vmap('p', '"_dP', 'Paste without yanking')
+xmap('<leader>p', [["_dP]], 'Paste without yanking')
+
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank (copy) to system clipboard" })
+nmap("<leader>Y", [["+Y]], "Yank (copy) to system clipboard")
 
 vmap('J', ":m '>+1<CR>gv=gv", 'Move down')
 vmap('K', ":m '<-2<CR>gv=gv", 'Move up')

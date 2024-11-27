@@ -183,7 +183,13 @@ local servers = {
     on_attach = function(_, bufnr)
       vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
-        command = "EslintFixAll"
+        callback = function()
+          if vim.g.FORMAT_ON_SAVE == 0 then
+            return
+          end
+
+          vim.cmd('EslintFixAll')
+        end
       })
     end
   },

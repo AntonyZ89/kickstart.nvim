@@ -3,17 +3,28 @@
 -- Use your language server to automatically format your code on save.
 -- Adds additional commands as well to manage the behavior
 
+local function can_format_on_save()
+  if vim.g.FORMAT_ON_SAVE == nil then
+    vim.g.FORMAT_ON_SAVE = 1
+  end
+
+  return vim.g.FORMAT_ON_SAVE
+end
+
 return {
   'neovim/nvim-lspconfig',
   config = function()
     local variables = require 'custom.variables'
 
     -- Switch for controlling whether you want autoformatting.
-    --  Use :KickstartFormatToggle to toggle autoformatting on or off
-    local format_is_enabled = true
-    vim.api.nvim_create_user_command('KickstartFormatToggle', function()
-      format_is_enabled = not format_is_enabled
-      print('Setting autoformatting to: ' .. tostring(format_is_enabled))
+    --  Use :AutoFormatToggle to toggle autoformatting on or off
+    vim.api.nvim_create_user_command('AutoFormatToggle', function()
+      if can_format_on_save() == 1 then
+        vim.g.FORMAT_ON_SAVE = 0
+      else
+        vim.g.FORMAT_ON_SAVE = 1
+      end
+      print('Setting autoformatting to: ' .. (vim.g.FORMAT_ON_SAVE == 1 and 'on' or 'off'))
     end, {})
 
     -- Create an augroup that is used for managing our formatting autocmds.
@@ -58,7 +69,7 @@ return {
           group = get_augroup(client),
           buffer = bufnr,
           callback = function()
-            if not format_is_enabled then
+            if can_format_on_save() == 0 then
               return
             end
 

@@ -10,7 +10,6 @@ return {
 
   require 'kickstart.plugins.debug',
   -- NOTE: First, some plugins that don't require any configuration
-  "aserowy/tmux.nvim",
   {
     "supermaven-inc/supermaven-nvim",
     config = function()
@@ -37,17 +36,6 @@ return {
     end,
   },
   {
-    "xiyaowong/transparent.nvim",
-    opts = function()
-      -- Disable transparent background in neovide
-      if vim.g.neovide then
-        return {
-          groups = {}
-        }
-      end
-    end
-  },
-  {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
@@ -71,7 +59,6 @@ return {
     "NvChad/nvim-colorizer.lua",
     opts = {
       user_default_options = {
-        names = true,
         tailwind = true,
       },
     },
@@ -126,12 +113,5 @@ return {
       },
       highlight_for_count = true,
     }
-  },
-  { "RRethy/vim-illuminate" },
-  {
-    "ahmedkhalf/project.nvim",
-    config = function()
-      require("project_nvim").setup({})
-    end,
   },
 }

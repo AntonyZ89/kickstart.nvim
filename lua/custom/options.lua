@@ -38,6 +38,9 @@ vim.opt.timeoutlen = 300
 -- Disable line wrapping
 vim.opt.wrap = false
 
+-- Disable swap files
+vim.o.swapfile = false
+
 -- Set completeopt to have a better completion experience
 vim.opt.completeopt = 'menuone,noselect'
 

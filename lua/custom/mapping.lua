@@ -50,6 +50,11 @@ nmap("<leader>tf", "<cmd>ToggleTerm direction=float<cr>", "Open terminal on floa
 nmap("<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Open terminal on horizontal split")
 nmap("<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Open terminal on vertical split")
 
+-- Buffer
+vim.keymap.set("n", "<leader><leader>", "<C-^>", { desc = "Alternar entre arquivos recentes" })
+vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Buffer Previous" })
+vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Buffer Next" })
+
 function _G.set_terminal_keymaps()
   tmap('<esc>', [[<C-\><C-n>]])
 

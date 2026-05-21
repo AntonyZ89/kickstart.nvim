@@ -1,13 +1,16 @@
 return {
   -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
+  branch = 'main',
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
   },
   build = ':TSUpdate',
-  opts = function()
+  config = function()
     -- See `:help nvim-treesitter`
-    require 'nvim-treesitter.configs'.setup {
+    local configs = require('nvim-treesitter')
+
+    configs.setup {
       -- Add languages to be installed here that you want installed for treesitter
       ensure_installed = {
         'lua',
@@ -29,7 +32,14 @@ return {
         'markdown_inline',
         'prisma',
         'python',
-        'toml'
+        'toml',
+        'regex'
+      },
+
+      query_linter = {
+        enable = true,
+        use_virtual_text = true,
+        lint_events = { "BufWrite", "CursorHold" },
       },
 
       -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)

@@ -18,6 +18,7 @@ return {
       })
     end,
   },
+  { "stevearc/conform.nvim", opts = {} },
   "mg979/vim-visual-multi",
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -51,7 +52,7 @@ return {
   },
   {
     "iamcco/markdown-preview.nvim",
-    build = "cd app && npm install",
+    build = "cd app && npm install && rm package-lock.json",
     init = function() vim.g.mkdp_filetypes = { "markdown" } end,
     ft = { "markdown" },
   },

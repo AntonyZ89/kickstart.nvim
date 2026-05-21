@@ -2,6 +2,9 @@
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
+-- Enable true color support - required by colorizer
+vim.opt.termguicolors = true
+
 -- Enables pseudo-transparency for the |popup-menu|
 vim.opt.pumblend = 10
 

@@ -46,14 +46,14 @@ vim.g.maplocalleader = ' '
 -- set custom variables
 local variables = require 'custom.variables'
 
+-- set vim options
+require 'custom.options'
+
 -- init lazy.vim
 require 'custom.lazy'
 
 -- register custom keymaps
 require 'custom.mapping'
-
--- set vim options
-require 'custom.options'
 
 -- [[ Basic Keymaps ]]
 
@@ -175,112 +175,89 @@ end
 --
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
+
+local vue_language_server_path =
+    vim.fn.stdpath("data")
+    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
 local servers = {
   -- clangd = {},
   -- gopls = {},
   rust_analyzer = {},
   eslint = {
-    filetypes = { 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'css', 'scss' },
-    on_attach = function(_, bufnr)
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        callback = function()
-          if vim.g.FORMAT_ON_SAVE == 0 then
-            return
-          end
-
-          vim.cmd('EslintFixAll')
-        end
-      })
-    end
+    filetypes = {
+      'vue',
+      'javascript',
+      'javascriptreact',
+      'typescript',
+      'typescriptreact'
+    },
   },
-  volar = {
-    on_attach = function(_, bufnr)
-      require("lspconfig").volar.setup({
-        -- NOTE: Uncomment to restrict Volar to only Vue/Nuxt projects. This will enable Volar to work alongside other language servers (tsserver).
-
-        init_options = {
-          vue = {
-            hybridMode = false,
-          },
-          -- NOTE: This might not be needed. Uncomment if you encounter issues.
-
-          -- typescript = {
-          --   tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
-          -- },
-        },
-        settings = {
-          typescript = {
-            inlayHints = {
-              enumMemberValues = {
-                enabled = true,
-              },
-              functionLikeReturnTypes = {
-                enabled = true,
-              },
-              propertyDeclarationTypes = {
-                enabled = true,
-              },
-              parameterTypes = {
-                enabled = true,
-                suppressWhenArgumentMatchesName = true,
-              },
-              variableTypes = {
-                enabled = true,
-              },
-            },
-          },
-        },
-      })
-    end,
+  vue_ls = {
+    init_options = {
+      vue = {
+        hybridMode = false,
+      }
+    },
   },
-  ts_ls = {
-    on_attach = function(_, bufnr)
-      local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
-      local volar_path = mason_packages .. "/vue-language-server/node_modules/@vue/language-server"
-
-      require("lspconfig").ts_ls.setup({
-        -- NOTE: To enable hybridMode, change HybrideMode to true above and uncomment the following filetypes block.
-
-        filetypes = { "typescript", "javascript", "vue" },
-        init_options = {
-          plugins = {
+  vtsls = {
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+    },
+    settings = {
+      vtsls = {
+        tsserver = {
+          globalPlugins = {
             {
               name = "@vue/typescript-plugin",
-              location = volar_path,
-              languages = { "typescript", "javascript", "vue" },
+              location = vue_language_server_path,
+              languages = { "vue" },
+              configNamespace = 'typescript',
             },
           },
         },
-        -- settings = {
-        --   typescript = {
-        --     inlayHints = {
-        --       includeInlayParameterNameHints = "all",
-        --       includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        --       includeInlayFunctionParameterTypeHints = true,
-        --       includeInlayVariableTypeHints = true,
-        --       includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-        --       includeInlayPropertyDeclarationTypeHints = true,
-        --       includeInlayFunctionLikeReturnTypeHints = true,
-        --       includeInlayEnumMemberValueHints = true,
-        --     },
-        --   },
-        -- },
-      })
-    end
+      },
+      typescript = {
+        inlayHints = {
+          parameterNames = {
+            enabled = 'all',
+          },
+          parameterTypes = {
+            enabled = true,
+          },
+          variableTypes = {
+            enabled = true,
+          },
+          propertyDeclarationTypes = {
+            enabled = true,
+          },
+          functionLikeReturnTypes = {
+            enabled = true,
+          },
+          enumMemberValues = {
+            enabled = true,
+          },
+        },
+      },
+    },
   },
   intelephense = {},
   unocss = {},
-  emmet_ls = {},
   tailwindcss = {},
   dockerls = {},
   marksman = {},
   prismals = {},
 
   lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+      },
     },
   },
 
@@ -292,7 +269,7 @@ require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
--- fixes volar watch files
+-- fixes vue_ls/volar watch files
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -302,33 +279,31 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
+  automatic_enable = false,
 }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    local lspconfig = require('lspconfig')
-    local server = servers[server_name] or {}
-    local server_on_attach = server.on_attach
+for server_name, server in pairs(servers) do
+  local server_on_attach = server.on_attach
 
-    if server_on_attach then
-      server.on_attach = nil
-    end
-
-    lspconfig[server_name].setup {
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-
-        if server_on_attach then
-          server_on_attach(client, bufnr)
-        end
-      end,
-      settings = server,
-      init_options = server.init_options,
-      filetypes = server.filetypes,
-    }
+  if server_on_attach then
+    server.on_attach = nil
   end
-}
+
+  vim.lsp.config(server_name, {
+    capabilities = capabilities,
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+
+      if server_on_attach then
+        server_on_attach(client, bufnr)
+      end
+    end,
+    settings = server.settings or {},
+    init_options = server.init_options,
+    filetypes = server.filetypes,
+  })
+  vim.lsp.enable(server_name)
+end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

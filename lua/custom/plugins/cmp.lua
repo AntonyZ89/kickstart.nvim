@@ -42,15 +42,22 @@ return {
     })
 
     vim.diagnostic.config({
-      -- update_in_insert = true,
       float = {
         focusable = false,
         style = "minimal",
         border = "rounded",
-        source = "always",
+        source = "if_many",
         header = "",
         prefix = "",
       },
+      virtual_text = {
+        spacing = 4,
+        prefix = ' ● ',
+      },
+      signs = true,
+      underline = true,
+      update_in_insert = true,
+      severity_sort = true,
     })
   end
 }
